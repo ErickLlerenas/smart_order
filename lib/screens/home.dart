@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smart_order/screens/home_menu.dart';
+import 'package:smart_order/screens/orders.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -11,12 +13,8 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: askdj,dnsakdknas',
-    ),
-    Text(
-      'Index 1: Business',
-    ),
+    HomeMenu(),
+    Orders(),
     Text(
       'Index 2: School',
     ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_order/screens/home_menu.dart';
 import 'package:smart_order/screens/orders.dart';
+import 'package:smart_order/screens/map.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -15,9 +16,7 @@ class _HomeState extends State<Home> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomeMenu(),
     Orders(),
-    Text(
-      'Index 2: School',
-    ),
+    Map(),
     Text(
       'Index 2: School',
     ),

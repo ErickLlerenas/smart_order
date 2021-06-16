@@ -13,7 +13,7 @@ class Orders extends StatelessWidget {
             children: comidas
                 .map(
                   (e) => Container(
-                    width: width / 2,
+                    width: width,
                     child: Card(
                         child: Column(
                       children: [

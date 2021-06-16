@@ -1,8 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ejele.smart_order">
    <application
+
         android:label="smart_order"
         android:icon="@mipmap/ic_launcher">
+         <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyDyrff9_s1wLUg7OOnH1zSiDhc9ewGXbIw"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

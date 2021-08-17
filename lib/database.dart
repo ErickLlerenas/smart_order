@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Database {
   late FirebaseFirestore firestore;
@@ -9,13 +11,26 @@ class Database {
 
   Future<void> create(String name, String desc, double price, String seller,
       String image) async {
+    var locationMessage = "";
+    var addr = "";
+    var addr1 = "";
+    var position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    var lastPosition = await Geolocator.getLastKnownPosition();
+
+    var lat = position.latitude;
+    var longi = position.longitude;
+
+    final coordinates = GeoPoint(lat, longi);
+
     try {
       await firestore.collection("foods").add({
         'name': name,
         'description': desc,
         'price': price,
         'seller': seller,
-        'image': image
+        'image': image,
+        'location': coordinates
       });
     } catch (e) {
       print(e);

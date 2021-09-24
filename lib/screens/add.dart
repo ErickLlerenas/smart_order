@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -90,8 +90,7 @@ class _AddState extends State<Add> {
         color: Colors.transparent,
         child: BottomAppBar(
           color: Colors.transparent,
-          child: RaisedButton(
-              color: Colors.black,
+          child: ElevatedButton(
               onPressed: () {
                 widget.db!.create(
                     nameController.text,

@@ -5,12 +5,6 @@ import 'package:smart_order/database.dart';
 import 'package:smart_order/screens/add.dart';
 import 'package:smart_order/screens/view.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await Firebase.initializeApp();
-}
-
 class Foods extends StatefulWidget {
   const Foods({Key? key}) : super(key: key);
 
@@ -19,12 +13,12 @@ class Foods extends StatefulWidget {
 }
 
 class _FoodsState extends State<Foods> {
-  Database? db;
+  Database db = Database();
   List docs = [];
   initialise() {
     db = Database();
-    db!.initiliase();
-    db!.read().then((value) => {
+    db.initiliase();
+    db.read().then((value) => {
           setState(() {
             docs = value;
           })

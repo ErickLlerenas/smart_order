@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_order/screens/home_menu.dart';
+import 'package:smart_order/screens/feed.dart';
 import 'package:smart_order/screens/orders.dart';
 import 'package:smart_order/screens/map.dart';
 import 'package:smart_order/screens/foods.dart';

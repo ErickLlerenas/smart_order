@@ -10,7 +10,38 @@ class HomeMenu extends StatefulWidget {
 }
 
 class _HomeMenuState extends State<HomeMenu> {
-  List foods = [];
+  List foods = [
+    {
+      "url": "assets/images/food1.jpeg",
+      "name": "Sandwich de aguacate",
+      "price": "\$50"
+    },
+    {
+      "url": "assets/images/food2.jpeg",
+      "name": "Ensalada César",
+      "price": "\$80"
+    },
+    {
+      "url": "assets/images/food3.jpeg",
+      "name": "Pizza casera",
+      "price": "\$129"
+    },
+    {
+      "url": "assets/images/food1.jpeg",
+      "name": "Sandwich de aguacate",
+      "price": "\$50"
+    },
+    {
+      "url": "assets/images/food2.jpeg",
+      "name": "Ensalada César",
+      "price": "\$80"
+    },
+    {
+      "url": "assets/images/food3.jpeg",
+      "name": "Pizza casera",
+      "price": "\$129"
+    },
+  ];
 
   @override
   void initState() {
@@ -19,14 +50,14 @@ class _HomeMenuState extends State<HomeMenu> {
   }
 
   Future getFoodFromFirebase() async {
-    await Firebase.initializeApp();
-    QuerySnapshot query =
-        await FirebaseFirestore.instance.collection('foods').get();
-    query.docs.forEach((food) {
-      setState(() {
-        foods.add(food.data());
-      });
-    });
+    // await Firebase.initializeApp();
+    // QuerySnapshot query =
+    //     await FirebaseFirestore.instance.collection('foods').get();
+    // query.docs.forEach((food) {
+    //   setState(() {
+    //     foods.add(food.data());
+    //   });
+    // });
   }
 
   @override
@@ -34,21 +65,36 @@ class _HomeMenuState extends State<HomeMenu> {
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-        body: Wrap(
-            children: foods
-                .map(
-                  (food) => Container(
-                    width: width,
-                    child: Card(
-                        child: Column(
-                      children: [
-                        Image.network(food['image']),
-                        Text(food['name']),
-                        Text(food['price'].toString()),
-                      ],
-                    )),
-                  ),
-                )
-                .toList()));
+        body: SingleChildScrollView(
+      child: Wrap(
+          children: foods
+              .map(
+                (food) => Container(
+                  width: width / 2,
+                  child: Card(
+                      child: Column(
+                    children: [
+                      Image.asset(
+                        food['url'],
+                        width: width / 2,
+                        height: width / 1.5,
+                        fit: BoxFit.cover,
+                      ),
+                      Text("${food['name']}"),
+                      Text(
+                        "${food['price']}",
+                        style: TextStyle(color: Colors.green, fontSize: 22),
+                      ),
+                      ElevatedButton(
+                          style:
+                              ElevatedButton.styleFrom(primary: Colors.green),
+                          onPressed: () {},
+                          child: Text("Comprar"))
+                    ],
+                  )),
+                ),
+              )
+              .toList()),
+    ));
   }
 }

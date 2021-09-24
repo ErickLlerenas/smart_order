@@ -7,23 +7,61 @@ class Orders extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
-    List comidas = [1, 2, 3, 4, 5, 6];
+    List comidas = [
+      {
+        "url": "assets/images/food1.jpeg",
+        "name": "Sandwich de aguacate",
+        "price": "Precio \$50"
+      },
+      {
+        "url": "assets/images/food2.jpeg",
+        "name": "Ensalada César",
+        "price": "Precio \$80"
+      },
+      {
+        "url": "assets/images/food3.jpeg",
+        "name": "Pizza casera",
+        "price": "Precio \$129"
+      },
+      {
+        "url": "assets/images/food1.jpeg",
+        "name": "Sandwich de aguacate",
+        "price": "Precio \$50"
+      },
+      {
+        "url": "assets/images/food2.jpeg",
+        "name": "Ensalada César",
+        "price": "Precio \$80"
+      },
+      {
+        "url": "assets/images/food3.jpeg",
+        "name": "Pizza casera",
+        "price": "Precio \$129"
+      },
+    ];
     return Scaffold(
-        body: Wrap(
-            children: comidas
-                .map(
-                  (e) => Container(
-                    width: width,
-                    child: Card(
-                        child: Column(
-                      children: [
-                        Image.asset('assets/images/food1.jpeg'),
-                        const Text('Comida xd'),
-                        const Text('Precio \$123213 xd'),
-                      ],
-                    )),
-                  ),
-                )
-                .toList()));
+        body: SingleChildScrollView(
+      child: Wrap(
+          children: comidas
+              .map(
+                (e) => Container(
+                  width: width / 2,
+                  child: Card(
+                      child: Column(
+                    children: [
+                      Image.asset(
+                        e['url'],
+                        width: width / 2,
+                        height: width / 1.5,
+                        fit: BoxFit.cover,
+                      ),
+                      Text("${e['name']}"),
+                      Text("${e['price']}"),
+                    ],
+                  )),
+                ),
+              )
+              .toList()),
+    ));
   }
 }

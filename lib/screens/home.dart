@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smart_order/screens/home_menu.dart';
 import 'package:smart_order/screens/orders.dart';
 import 'package:smart_order/screens/map.dart';
+import 'package:smart_order/screens/foods.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -18,8 +19,9 @@ class _HomeState extends State<Home> {
     Orders(),
     Map(),
     Text(
-      'Index 2: School',
+      'Profile in progress',
     ),
+    Foods(),
   ];
 
   void _onItemTapped(int index) {
@@ -52,6 +54,10 @@ class _HomeState extends State<Home> {
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Perfil',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.food_bank),
+            label: 'Platillos',
           ),
         ],
         currentIndex: _selectedIndex,

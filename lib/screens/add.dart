@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import '../database.dart';
 
 class Add extends StatefulWidget {
+  final Database db;
   Add({Key? key, required this.db}) : super(key: key);
-  Database? db;
   @override
   _AddState createState() => _AddState();
 }
@@ -92,7 +92,7 @@ class _AddState extends State<Add> {
           color: Colors.transparent,
           child: ElevatedButton(
               onPressed: () {
-                widget.db!.create(
+                widget.db.create(
                     nameController.text,
                     descController.text,
                     double.parse(priceController.text),

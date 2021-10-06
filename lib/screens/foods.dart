@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:smart_order/database.dart';
 import 'package:smart_order/screens/add.dart';
 import 'package:smart_order/screens/view.dart';
@@ -14,13 +14,12 @@ class Foods extends StatefulWidget {
 
 class _FoodsState extends State<Foods> {
   Database db = Database();
-  List docs = [];
+  List foods = [];
   initialise() {
-    db = Database();
     db.initiliase();
     db.read().then((value) => {
           setState(() {
-            docs = value;
+            foods = value;
           })
         });
   }
@@ -34,32 +33,30 @@ class _FoodsState extends State<Foods> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(56, 75, 49, 1.0),
-      appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(56, 75, 49, 1.0),
-        title: const Text("Foods"),
-      ),
-      body: ListView.builder(
-        itemCount: docs.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-            margin: const EdgeInsets.all(10),
-            child: ListTile(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            View(food: docs[index], db: db))).then((value) => {
-                      if (value != null) {initialise()}
-                    });
-              },
-              contentPadding: const EdgeInsets.only(right: 30, left: 36),
-              title: Text(docs[index]['name']),
-              trailing: Text(docs[index]['price'].toString()),
-            ),
-          );
-        },
+      body: SafeArea(
+        child: ListView.builder(
+          itemCount: foods.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Card(
+              margin: const EdgeInsets.all(10),
+              child: ListTile(
+                onTap: () {
+                  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  View(food: foods[index], db: db)))
+                      .then((value) => {
+                            if (value != null) {initialise()}
+                          });
+                },
+                contentPadding: const EdgeInsets.only(right: 30, left: 36),
+                title: Text(foods[index]['name']),
+                trailing: Text(foods[index]['price'].toString()),
+              ),
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

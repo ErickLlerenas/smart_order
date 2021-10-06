@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_order/screens/feed.dart';
+import 'package:smart_order/screens/feed/feed.dart';
 import 'package:smart_order/screens/orders.dart';
 import 'package:smart_order/screens/map.dart';
 import 'package:smart_order/screens/foods.dart';
@@ -17,11 +17,11 @@ class _HomeState extends State<Home> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomeMenu(),
     Orders(),
+    Foods(),
     Map(),
     Text(
       'Profile in progress',
     ),
-    Foods(),
   ];
 
   void _onItemTapped(int index) {
@@ -48,20 +48,20 @@ class _HomeState extends State<Home> {
             label: 'Pedidos',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.map),
+            icon: Icon(Icons.add),
+            label: 'Agregar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.location_on),
             label: 'Mapa',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Perfil',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.food_bank),
-            label: 'Platillos',
-          ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue[800],
+        selectedItemColor: Colors.orange[800],
         onTap: _onItemTapped,
       ),
     );

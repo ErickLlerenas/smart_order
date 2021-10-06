@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -6,8 +6,8 @@ import '../database.dart';
 
 class View extends StatefulWidget {
   View({Key? key, required this.food, required this.db}) : super(key: key);
-  Map food;
-  Database? db;
+  final Map food;
+  final Database db;
   @override
   _ViewState createState() => _ViewState();
 }
@@ -21,10 +21,9 @@ class _ViewState extends State<View> {
   @override
   void initState() {
     super.initState();
-    print(widget.food);
     nameController.text = widget.food['name'];
     descController.text = widget.food['description'];
-    priceController.text = widget.food['price'].toString();
+    priceController.text = widget.food['price'].toDouble().toString();
     sellerController.text = widget.food['seller'];
     imageController.text = widget.food['image'];
   }
@@ -40,7 +39,7 @@ class _ViewState extends State<View> {
           IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () {
-                widget.db!.delete(widget.food["id"]);
+                widget.db.delete(widget.food["id"]);
                 Navigator.pop(context, true);
               })
         ],
@@ -99,7 +98,7 @@ class _ViewState extends State<View> {
           child: RaisedButton(
               color: Colors.black,
               onPressed: () {
-                widget.db!.update(
+                widget.db.update(
                     widget.food['id'],
                     nameController.text,
                     descController.text,

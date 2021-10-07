@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'dart:async';
 
@@ -14,9 +16,10 @@ class _MapState extends State<Map> {
   Completer<GoogleMapController> _controller = Completer();
 
   List<Marker> myMarker = [];
+  var userLocation = LatLng(12, -141);
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: const LatLng(37.42796133580664, -122.085749655962),
+  CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(21.242962, -108.719511),
     zoom: 14.4746,
   );
 
@@ -24,10 +27,12 @@ class _MapState extends State<Map> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GoogleMap(
+        myLocationButtonEnabled: true,
         mapType: MapType.normal,
         initialCameraPosition: _kGooglePlex,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
+          currentCamera();
         },
         markers: Set.from(myMarker),
         onTap: _handleTap,
@@ -37,7 +42,6 @@ class _MapState extends State<Map> {
 
   _handleTap(LatLng tappedPoint) {
     setState(() {
-      myMarker = [];
       myMarker.add(
         Marker(
           markerId: MarkerId(tappedPoint.toString()),
@@ -45,5 +49,18 @@ class _MapState extends State<Map> {
         ),
       );
     });
+  }
+
+  Future<void> currentCamera() async {
+    var position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    // var lastPosition = await Geolocator.getLastKnownPosition();
+
+    CameraPosition newCamera = CameraPosition(
+      target: LatLng(position.latitude, position.longitude),
+      zoom: 14.4746,
+    );
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(newCamera));
   }
 }

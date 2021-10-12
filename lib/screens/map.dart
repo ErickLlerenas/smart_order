@@ -13,6 +13,7 @@ class Map extends StatefulWidget {
 }
 
 class _MapState extends State<Map> {
+  late BitmapDescriptor pinLocationIcon;
   Completer<GoogleMapController> _controller = Completer();
 
   List<Marker> myMarker = [];
@@ -23,6 +24,7 @@ class _MapState extends State<Map> {
     zoom: 14.4746,
   );
 
+  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +40,12 @@ class _MapState extends State<Map> {
         onTap: _handleTap,
       ),
     );
+  }
+
+  void setCustomMapPin() async {
+    pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(devicePixelRatio: 2.5),
+        '../../assets/images/icono-circulo.png');
   }
 
   _handleTap(LatLng tappedPoint) {
@@ -61,6 +69,16 @@ class _MapState extends State<Map> {
       zoom: 14.4746,
     );
     final GoogleMapController controller = await _controller.future;
+    setState(() {
+      myMarker.add(
+        Marker(
+          markerId: MarkerId(position.toString()),
+          position: LatLng(position.latitude, position.longitude),
+          infoWindow: const InfoWindow(title: "Tu ubicacion", snippet: ''),
+        ),
+      );
+    });
+
     controller.animateCamera(CameraUpdate.newCameraPosition(newCamera));
   }
 }

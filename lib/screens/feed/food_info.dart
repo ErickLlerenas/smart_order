@@ -118,28 +118,30 @@ class _FoodInfoState extends State<FoodInfo> {
               Container(
                 margin: EdgeInsets.all(20),
                 width: double.infinity,
-                child: isLoading ? LinearProgressIndicator() : ElevatedButton(
-                    style: ElevatedButton.styleFrom(primary: Colors.orange),
-                    onPressed: () async{
-                      setState(() {
-                        isLoading = true;
-                      });
-                      await db.createOrder(
-                          userID: '3121811727',
-                          sellerID: '3121047740',
-                          food: {
-                            'title': widget.title,
-                            'description': widget.description,
-                            'image': widget.image,
-                            'price': widget.price,
-                          },
-                          amount: amount);
-                       setState(() {
-                        isLoading = false;
-                      });
-                      Navigator.pop(context);
-                    },
-                    child: Text('Realizar pedido')),
+                child: isLoading
+                    ? LinearProgressIndicator()
+                    : ElevatedButton(
+                        style: ElevatedButton.styleFrom(primary: Colors.orange),
+                        onPressed: () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          await db.createOrder(
+                              userID: '3121047740',
+                              sellerID: '3121811727',
+                              food: {
+                                'title': widget.title,
+                                'description': widget.description,
+                                'image': widget.image,
+                                'price': widget.price,
+                              },
+                              amount: amount);
+                          setState(() {
+                            isLoading = false;
+                          });
+                          Navigator.pop(context);
+                        },
+                        child: Text('Realizar pedido')),
               )
             ],
           )

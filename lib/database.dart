@@ -56,9 +56,7 @@ class Database {
             .collection("orders")
             .doc(sellerID)
             .update({'orders': orders});
-
       } else {
-
         orders.add({
           'food': food,
           'user_id': userID,
@@ -66,10 +64,11 @@ class Database {
           'state': {'accepted': false, 'canceled': false, 'finished': false}
         });
 
-        await firestore.collection("orders").doc(sellerID).set({'orders':orders});
-
+        await firestore
+            .collection("orders")
+            .doc(sellerID)
+            .set({'orders': orders});
       }
-      
     } catch (e) {
       print("$e");
     }

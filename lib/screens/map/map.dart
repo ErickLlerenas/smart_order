@@ -2,7 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'dart:async';
 
 class Map extends StatefulWidget {
@@ -14,6 +15,7 @@ class Map extends StatefulWidget {
 
 class _MapState extends State<Map> {
   late BitmapDescriptor pinLocationIcon;
+  List sellers = [];
   Completer<GoogleMapController> _controller = Completer();
 
   List<Marker> myMarker = [];
@@ -25,6 +27,11 @@ class _MapState extends State<Map> {
   );
 
   @override
+  void initState() {
+    getSellersFood();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +44,6 @@ class _MapState extends State<Map> {
           currentCamera();
         },
         markers: Set.from(myMarker),
-        onTap: _handleTap,
       ),
     );
   }
@@ -48,14 +54,24 @@ class _MapState extends State<Map> {
         '../../assets/images/icono-circulo.png');
   }
 
-  _handleTap(LatLng tappedPoint) {
-    setState(() {
-      myMarker.add(
-        Marker(
-          markerId: MarkerId(tappedPoint.toString()),
-          position: tappedPoint,
-        ),
-      );
+  Future getSellersFood() async {
+    await Firebase.initializeApp();
+    QuerySnapshot query =
+        await FirebaseFirestore.instance.collection('sellers').get();
+    query.docs.forEach((seller) {
+      print(seller["location"]);
+      if (mounted) {
+        GeoPoint pos = seller["location"];
+        LatLng latLng = new LatLng(pos.latitude, pos.longitude);
+        setState(() {
+          myMarker.add(
+            Marker(
+              markerId: MarkerId(seller['name']),
+              position: latLng,
+            ),
+          );
+        });
+      }
     });
   }
 
@@ -69,16 +85,16 @@ class _MapState extends State<Map> {
       zoom: 14.4746,
     );
     final GoogleMapController controller = await _controller.future;
-    if(mounted){
+    if (mounted) {
       setState(() {
-      myMarker.add(
-        Marker(
-          markerId: MarkerId(position.toString()),
-          position: LatLng(position.latitude, position.longitude),
-          infoWindow: const InfoWindow(title: "Tu ubicacion", snippet: ''),
-        ),
-      );
-    });
+        myMarker.add(
+          Marker(
+            markerId: MarkerId(position.toString()),
+            position: LatLng(position.latitude, position.longitude),
+            infoWindow: const InfoWindow(title: "Tu ubicacion", snippet: ''),
+          ),
+        );
+      });
     }
 
     controller.animateCamera(CameraUpdate.newCameraPosition(newCamera));

@@ -11,101 +11,117 @@ class HomeMenu extends StatefulWidget {
 }
 
 class _HomeMenuState extends State<HomeMenu> {
-  List foods = [];
+  List sellers = [];
 
   @override
   void initState() {
-    getFoodFromFirebase();
+    getSellersFood();
     super.initState();
   }
 
-  Future getFoodFromFirebase() async {
+  Future getSellersFood() async {
     await Firebase.initializeApp();
     QuerySnapshot query =
-        await FirebaseFirestore.instance.collection('foods').get();
-    query.docs.forEach((food) {
+        await FirebaseFirestore.instance.collection('sellers').get();
+    query.docs.forEach((seller) {
       setState(() {
-        foods.add(food.data());
+        sellers.add(seller.data());
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-
     return Scaffold(
         body: SingleChildScrollView(
       child: SafeArea(
-        child: Wrap(
-            children: foods
-                .map(
-                  (food) => GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => FoodInfo(
-                                  image: food['image'],
-                                  name: food['name'],
-                                  description: food['description'],
-                                  price: food['price'].toDouble())));
-                    },
-                    child: Container(
-                      width: width,
-                      child: Card(
-                          child: Row(
-                        children: [
-                          Expanded(
-                            flex: 4,
-                            child: Container(
-                              margin: EdgeInsets.all(12),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image.network(
-                                  food['image'],
-                                  width: 200,
-                                  height: 115,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 5,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Text("${food['name']}",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 22)),
-                                Text("${food['description']}",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 18)),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Text(
-                                  "\$${food['price'].toDouble()}",
-                                  style: TextStyle(
-                                    color: Colors.orange,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      )),
-                    ),
-                  ),
-                )
-                .toList()),
+        child: Column(
+          children: sellers.map((seller) => Food(foods: seller['foods'])).toList())
       ),
     ));
+  }
+}
+
+class Food extends StatelessWidget {
+  final List foods;
+
+   const Food({
+    Key? key,
+    required this.foods,
+  }) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+        double width = MediaQuery.of(context).size.width;
+
+    return Wrap(
+        children: foods
+            .map(
+              (food) => GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => FoodInfo(
+                              image: food['image'],
+                              title: food['title'],
+                              description: food['description'],
+                              price: food['price'].toDouble())));
+                },
+                child: Container(
+                  width: width,
+                  child: Card(
+                      child: Row(
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: Container(
+                          margin: EdgeInsets.all(12),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.network(
+                              food['image'],
+                              width: 200,
+                              height: 115,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 5,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text("${food['title']}",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 22)),
+                            Text("${food['description']}",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 18)),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Text(
+                              "\$${food['price'].toDouble()}",
+                              style: TextStyle(
+                                color: Colors.orange,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  )),
+                ),
+              ),
+            )
+            .toList());
   }
 }

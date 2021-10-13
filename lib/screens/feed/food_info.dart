@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class FoodInfo extends StatefulWidget {
   final String image;
-  final String name;
+  final String title;
   final String description;
   final double price;
 
@@ -10,7 +10,7 @@ class FoodInfo extends StatefulWidget {
       {Key? key,
       required this.description,
       required this.image,
-      required this.name,
+      required this.title,
       required this.price})
       : super(key: key);
 
@@ -41,7 +41,7 @@ class _FoodInfoState extends State<FoodInfo> {
               Container(
                 margin: EdgeInsets.all(20),
                 child: Text(
-                  widget.name,
+                  widget.title,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 24,
@@ -106,7 +106,7 @@ class _FoodInfoState extends State<FoodInfo> {
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(primary: Colors.orange),
                     onPressed: () {},
-                    child: Text('Agregar al carrito')),
+                    child: Text('Realizar pedido')),
               )
             ],
           )

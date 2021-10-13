@@ -6,8 +6,8 @@
     
    <application
 
-        android:label="smart_order"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Smart Order"
+        android:icon="@mipmap/launcher_icon">
          <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyDyrff9_s1wLUg7OOnH1zSiDhc9ewGXbIw"/>
         <activity

@@ -1,35 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:smart_order/screens/feed/food_info.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_core/firebase_core.dart';
+import 'package:smart_order/database.dart';
+import 'package:smart_order/screens/add/add_food.dart';
+import 'package:smart_order/screens/add/edit_food.dart';
 
-class HomeMenu extends StatefulWidget {
-  const HomeMenu({Key? key}) : super(key: key);
+class Foods extends StatefulWidget {
+  const Foods({Key? key}) : super(key: key);
 
   @override
-  State<HomeMenu> createState() => _HomeMenuState();
+  _FoodsState createState() => _FoodsState();
 }
 
-class _HomeMenuState extends State<HomeMenu> {
-  List sellers = [];
+class _FoodsState extends State<Foods> {
+  Database db = Database();
+  List foods = [];
+  initialise() {
+    db.initiliase();
+    db.read("3121811727").then((value) {
+      setState(() {
+        foods = value;
+      });
+      print(foods);
+    });
+  }
 
   @override
   void initState() {
-    getSellersFood();
     super.initState();
-  }
-
-  Future getSellersFood() async {
-    await Firebase.initializeApp();
-    QuerySnapshot query =
-        await FirebaseFirestore.instance.collection('sellers').get();
-    query.docs.forEach((seller) {
-      if(mounted){
-        setState(() {
-        sellers.add(seller.data());
-      });
-      }
-    });
+    initialise();
   }
 
   @override
@@ -37,39 +36,47 @@ class _HomeMenuState extends State<HomeMenu> {
     return Scaffold(
         body: SingleChildScrollView(
       child: SafeArea(
-        child: Column(
-          children: sellers.map((seller) => Food(foods: seller['foods'])).toList())
+          child: Column(
+              children:
+                  foods.map((food) => Food(foods: food['foods'],db:db)).toList())),
+    ),
+    floatingActionButton: FloatingActionButton(
+      backgroundColor:Colors.orange,
+        onPressed: () {
+          Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Add(db: db)))
+              .then((value) {
+            if (value != null) {
+              initialise();
+            }
+          });
+        },
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
       ),
-    ));
+    );
   }
 }
 
 class Food extends StatelessWidget {
   final List foods;
+  final dynamic db;
 
-   const Food({
+  const Food({
     Key? key,
     required this.foods,
+    required this.db,
   }) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
-        double width = MediaQuery.of(context).size.width;
+    double width = MediaQuery.of(context).size.width;
 
     return Wrap(
         children: foods
-            .map(
-              (food) => GestureDetector(
+            .asMap().map((index, food) => MapEntry(index,GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => FoodInfo(
-                              image: food['image'],
-                              title: food['title'],
-                              description: food['description'],
-                              price: food['price'].toDouble())));
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=>EditFood(food: food, db: db,index:index)));
                 },
                 child: Container(
                   width: width,
@@ -99,12 +106,10 @@ class Food extends StatelessWidget {
                           children: [
                             Text("${food['title']}",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 22)),
+                                    fontWeight: FontWeight.bold, fontSize: 22)),
                             Text("${food['description']}",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 18)),
+                                    fontWeight: FontWeight.w400, fontSize: 18)),
                             SizedBox(
                               height: 15,
                             ),
@@ -124,6 +129,7 @@ class Food extends StatelessWidget {
                 ),
               ),
             )
-            .toList());
+            ).values.toList());
   }
 }
+

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smart_order/screens/feed/feed.dart';
-import 'package:smart_order/screens/orders.dart';
-import 'package:smart_order/screens/map.dart';
-import 'package:smart_order/screens/foods.dart';
+import 'package:smart_order/screens/orders/orders.dart';
+import 'package:smart_order/screens/map/map.dart';
+import 'package:smart_order/screens/add/foods.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);

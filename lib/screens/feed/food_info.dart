@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_order/database.dart';
 
 class FoodInfo extends StatefulWidget {
   final String image;
@@ -19,7 +20,19 @@ class FoodInfo extends StatefulWidget {
 }
 
 class _FoodInfoState extends State<FoodInfo> {
-  int counter = 0;
+  int amount = 1;
+
+  Database db = Database();
+  List foods = [];
+  initialise() {
+    db.initiliase();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initialise();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +85,7 @@ class _FoodInfoState extends State<FoodInfo> {
                             splashColor: Colors.grey, // Splash color
                             onTap: () {
                               setState(() {
-                                if (counter >= 1) counter--;
+                                if (amount > 1) amount--;
                               });
                             },
                             child: SizedBox(
@@ -82,7 +95,7 @@ class _FoodInfoState extends State<FoodInfo> {
                           ),
                         ),
                       ),
-                      Text(counter.toString()),
+                      Text(amount.toString()),
                       ClipOval(
                         child: Material(
                           color: Colors.grey[200], // Button color
@@ -90,7 +103,7 @@ class _FoodInfoState extends State<FoodInfo> {
                             splashColor: Colors.grey, // Splash color
                             onTap: () {
                               setState(() {
-                                if (counter < 10) counter++;
+                                if (amount < 10) amount++;
                               });
                             },
                             child: SizedBox(
@@ -105,7 +118,18 @@ class _FoodInfoState extends State<FoodInfo> {
                 width: double.infinity,
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(primary: Colors.orange),
-                    onPressed: () {},
+                    onPressed: () {
+                      db.createOrder(
+                          userID: '3121811727',
+                          sellerID: '3121047740',
+                          food: {
+                            'title': widget.title,
+                            'description': widget.description,
+                            'image': widget.image,
+                            'price': widget.price,
+                          },
+                          amount: amount);
+                    },
                     child: Text('Realizar pedido')),
               )
             ],

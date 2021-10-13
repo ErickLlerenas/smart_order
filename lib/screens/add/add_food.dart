@@ -2,7 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../database.dart';
+import '../../database.dart';
 
 class Add extends StatefulWidget {
   final Database db;
@@ -12,10 +12,10 @@ class Add extends StatefulWidget {
 }
 
 class _AddState extends State<Add> {
-  TextEditingController nameController = TextEditingController();
+  bool isLoading = false;
+  TextEditingController titleController = TextEditingController();
   TextEditingController descController = TextEditingController();
   TextEditingController priceController = TextEditingController();
-  TextEditingController sellerController = TextEditingController();
   TextEditingController imageController = TextEditingController();
 
   @override
@@ -26,18 +26,9 @@ class _AddState extends State<Add> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(56, 75, 49, 1.0),
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(56, 75, 49, 1.0),
-        title: const Text("Food Add"),
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () {
-                // widget.db.delete(widget.country["id"]);
-                // Navigator.pop(context, true);
-              })
-        ],
+        backgroundColor: Colors.orange,
+        title: Text("Agregar nueva comida"),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -45,15 +36,15 @@ class _AddState extends State<Add> {
           child: Column(
             children: [
               TextFormField(
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.black),
                 decoration: inputDecoration("Nombre de comida"),
-                controller: nameController,
+                controller: titleController,
               ),
               const SizedBox(
                 height: 20,
               ),
               TextFormField(
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.black),
                 decoration: inputDecoration("Descripcion de comida"),
                 controller: descController,
               ),
@@ -61,23 +52,17 @@ class _AddState extends State<Add> {
                 height: 20,
               ),
               TextFormField(
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.black),
                 decoration: inputDecoration("Precio de comida"),
                 controller: priceController,
+                keyboardType: TextInputType.number,
               ),
               const SizedBox(
                 height: 20,
               ),
+             
               TextFormField(
-                style: const TextStyle(color: Colors.white),
-                decoration: inputDecoration("Vendedor"),
-                controller: sellerController,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.black),
                 decoration: inputDecoration("Link de imagen"),
                 controller: imageController,
               ),
@@ -90,19 +75,27 @@ class _AddState extends State<Add> {
         color: Colors.transparent,
         child: BottomAppBar(
           color: Colors.transparent,
-          child: ElevatedButton(
-              onPressed: () {
-                widget.db.create(
-                    nameController.text,
-                    descController.text,
-                    double.parse(priceController.text),
-                    sellerController.text,
-                    imageController.text);
+          child: isLoading ? LinearProgressIndicator(): ElevatedButton(
+              onPressed: () async{
+                  setState(() {
+                    isLoading = true;
+                  });
+                  await widget.db.add(
+                  id: '3121811727',
+                  title: titleController.text,
+                  description: descController.text,
+                  image: imageController.text,
+                  price: double.parse(priceController.text),
+                );
+                 setState(() {
+                    isLoading = false;
+                  });
                 Navigator.pop(context, true);
               },
+              
               child: const Text(
-                "Save",
-                style: TextStyle(color: Colors.white),
+                "Agregar comida",
+                style: TextStyle(color: Colors.white,fontSize: 18),
               )),
         ),
       ),
@@ -111,13 +104,13 @@ class _AddState extends State<Add> {
 
   InputDecoration inputDecoration(String labelText) {
     return InputDecoration(
-      focusColor: Colors.white,
-      labelStyle: const TextStyle(color: Colors.white),
+      focusColor: Colors.black,
+      labelStyle: const TextStyle(color: Colors.black),
       labelText: labelText,
-      fillColor: Colors.white,
+      fillColor: Colors.black,
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(25.0),
-        borderSide: const BorderSide(color: Colors.white),
+        borderSide: const BorderSide(color: Colors.black),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(25.0),

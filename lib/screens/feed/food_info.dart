@@ -22,6 +22,8 @@ class FoodInfo extends StatefulWidget {
 class _FoodInfoState extends State<FoodInfo> {
   int amount = 1;
 
+  bool isLoading = false;
+
   Database db = Database();
   List foods = [];
   initialise() {
@@ -116,10 +118,13 @@ class _FoodInfoState extends State<FoodInfo> {
               Container(
                 margin: EdgeInsets.all(20),
                 width: double.infinity,
-                child: ElevatedButton(
+                child: isLoading ? LinearProgressIndicator() : ElevatedButton(
                     style: ElevatedButton.styleFrom(primary: Colors.orange),
-                    onPressed: () {
-                      db.createOrder(
+                    onPressed: () async{
+                      setState(() {
+                        isLoading = true;
+                      });
+                      await db.createOrder(
                           userID: '3121811727',
                           sellerID: '3121047740',
                           food: {
@@ -129,6 +134,10 @@ class _FoodInfoState extends State<FoodInfo> {
                             'price': widget.price,
                           },
                           amount: amount);
+                       setState(() {
+                        isLoading = false;
+                      });
+                      Navigator.pop(context);
                     },
                     child: Text('Realizar pedido')),
               )

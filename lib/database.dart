@@ -44,7 +44,6 @@ class Database {
           await firestore.collection("orders").doc(sellerID).get();
       List orders = [];
       if (seller.exists) {
-        print("EXISTE XD");
         orders = seller['orders'];
         orders.add({
           'food': food,
@@ -57,8 +56,8 @@ class Database {
             .collection("orders")
             .doc(sellerID)
             .update({'orders': orders});
+
       } else {
-        print("NO EXISTE XD");
 
         orders.add({
           'food': food,
@@ -67,13 +66,12 @@ class Database {
           'state': {'accepted': false, 'canceled': false, 'finished': false}
         });
 
-        // await firestore
-        //     .collection("orders")
-        //     .doc(sellerID)
-        //     .add({"orders": orders});
+        await firestore.collection("orders").doc(sellerID).set({'orders':orders});
+
       }
+      
     } catch (e) {
-      print(e);
+      print("$e");
     }
   }
 

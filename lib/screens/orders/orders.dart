@@ -1,67 +1,106 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-class Orders extends StatelessWidget {
+class Orders extends StatefulWidget {
   const Orders({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+  State<Orders> createState() => _OrdersState();
+}
 
-    List comidas = [
-      {
-        "url": "assets/images/food1.jpeg",
-        "name": "Sandwich de aguacate",
-        "price": "Precio \$50"
-      },
-      {
-        "url": "assets/images/food2.jpeg",
-        "name": "Ensalada César",
-        "price": "Precio \$80"
-      },
-      {
-        "url": "assets/images/food3.jpeg",
-        "name": "Pizza casera",
-        "price": "Precio \$129"
-      },
-      {
-        "url": "assets/images/food1.jpeg",
-        "name": "Sandwich de aguacate",
-        "price": "Precio \$50"
-      },
-      {
-        "url": "assets/images/food2.jpeg",
-        "name": "Ensalada César",
-        "price": "Precio \$80"
-      },
-      {
-        "url": "assets/images/food3.jpeg",
-        "name": "Pizza casera",
-        "price": "Precio \$129"
-      },
-    ];
+class _OrdersState extends State<Orders> {
+  List orders = [];
+  @override
+  void initState() {
+    getOrders();
+    super.initState();
+  }
+
+  Future getOrders() async {
+    await Firebase.initializeApp();
+    DocumentSnapshot seller =
+        await FirebaseFirestore.instance.collection('orders').doc('3121811727').get();
+      if(mounted){
+        if(seller.exists){
+         setState(() {
+            orders = seller['orders'];
+         });
+        } 
+      }
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+            double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
         body: SingleChildScrollView(
-      child: Wrap(
-          children: comidas
-              .map(
-                (e) => Container(
-                  width: width / 2,
+      child: SafeArea(
+        child: Wrap(
+        children: orders
+            .map(
+              (order) => GestureDetector(
+                onTap: () {
+                 
+                },
+                child: Container(
+                  width: width,
                   child: Card(
-                      child: Column(
+                      child: Row(
                     children: [
-                      Image.asset(
-                        e['url'],
-                        width: width / 2,
-                        height: width / 1.5,
-                        fit: BoxFit.cover,
+                      Expanded(
+                        flex: 4,
+                        child: Container(
+                          margin: EdgeInsets.all(12),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.network(
+                              order['food']['image'],
+                              width: 200,
+                              height: 115,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
                       ),
-                      Text("${e['name']}"),
-                      Text("${e['price']}"),
+                      Expanded(
+                        flex: 5,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text("${order['food']['title']}",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 22)),
+                            Text("${order['food']['description']}",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 18)),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Text(
+                              "\$${order['food']['price'].toDouble()}",
+                              style: TextStyle(
+                                color: Colors.orange,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   )),
                 ),
-              )
-              .toList()),
+              ),
+            )
+            .toList())
+      ),
     ));
   }
 }
+

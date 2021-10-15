@@ -4,7 +4,6 @@ import 'package:smart_order/screens/orders/orders.dart';
 import 'package:smart_order/screens/map/map.dart';
 import 'package:smart_order/screens/add/foods.dart';
 import 'package:smart_order/screens/profile/profile.dart';
-import 'package:smart_order/helpers/database.dart';
 
 class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_order/providers/app_provider.dart';
 import 'package:smart_order/screens/map/map.dart';
 
 class Orders extends StatefulWidget {
@@ -12,13 +14,15 @@ class Orders extends StatefulWidget {
 
 class _OrdersState extends State<Orders> {
   List orders = [];
+  String phone = "";
   @override
   void initState() {
-    getOrders();
+    phone = Provider.of<AppProvider>(context, listen: false).phone;
+    getOrders(phone);
     super.initState();
   }
 
-  Future getOrders() async {
+  Future getOrders(String phone) async {
     await Firebase.initializeApp();
     DocumentSnapshot seller = await FirebaseFirestore.instance
         .collection('orders')

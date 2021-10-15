@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_order/helpers/database.dart';
+import 'package:smart_order/providers/app_provider.dart';
 
 class FoodInfo extends StatefulWidget {
   final String image;
@@ -23,7 +25,7 @@ class FoodInfo extends StatefulWidget {
 
 class _FoodInfoState extends State<FoodInfo> {
   int amount = 1;
-
+  String phone = "";
   bool isLoading = false;
 
   Database db = Database();
@@ -34,6 +36,7 @@ class _FoodInfoState extends State<FoodInfo> {
 
   @override
   void initState() {
+    phone = Provider.of<AppProvider>(context, listen: false).phone;
     super.initState();
     initialise();
   }
@@ -129,7 +132,7 @@ class _FoodInfoState extends State<FoodInfo> {
                             isLoading = true;
                           });
                           await db.createOrder(
-                              userID: '3121811727',
+                              userID: phone,
                               sellerID: widget.sellerID,
                               food: {
                                 'title': widget.title,

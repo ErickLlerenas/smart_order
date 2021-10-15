@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:smart_order/helpers/database.dart';
+import 'package:smart_order/providers/app_provider.dart';
 import 'package:smart_order/screens/add/add_food.dart';
 import 'package:smart_order/screens/add/edit_food.dart';
 
@@ -15,20 +17,21 @@ class Foods extends StatefulWidget {
 class _FoodsState extends State<Foods> {
   Database db = Database();
   List foods = [];
-  initialise() {
+  String phone = "";
+  initialise(String id) {
     db.initiliase();
-    db.read("3121811727").then((value) {
+    db.read(id).then((value) {
       setState(() {
         foods = value;
       });
-      print(foods);
     });
   }
 
   @override
   void initState() {
+    phone = Provider.of<AppProvider>(context, listen: false).phone;
     super.initState();
-    initialise();
+    initialise(phone);
   }
 
   @override
@@ -47,7 +50,7 @@ class _FoodsState extends State<Foods> {
                   context, MaterialPageRoute(builder: (context) => Add(db: db)))
               .then((value) {
             if (value != null) {
-              initialise();
+              initialise(phone);
             }
           });
         },

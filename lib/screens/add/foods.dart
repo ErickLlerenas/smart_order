@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_core/firebase_core.dart';
-import 'package:smart_order/database.dart';
+import 'package:smart_order/helpers/database.dart';
 import 'package:smart_order/screens/add/add_food.dart';
 import 'package:smart_order/screens/add/edit_food.dart';
 

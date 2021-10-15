@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_order/database.dart';
+import 'package:smart_order/helpers/database.dart';
 
 class FoodInfo extends StatefulWidget {
   final String image;

@@ -1,6 +1,3 @@
-import 'dart:ffi';
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -8,11 +5,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'dart:async';
 
-import '../../database.dart';
+import '../../helpers/database.dart';
 
 class Profile extends StatefulWidget {
-  final Database db;
-  Profile({Key? key, required this.db}) : super(key: key);
+  Profile({Key? key, this.db}) : super(key: key);
+  final Database? db;
 
   @override
   _ProfileState createState() => _ProfileState();
@@ -33,7 +30,7 @@ class _ProfileState extends State<Profile> {
             color: Colors.transparent,
             child: ElevatedButton(
                 onPressed: () async {
-                  await widget.db.setLocation(
+                  await widget.db!.setLocation(
                     id: '3121811727',
                   );
                 },

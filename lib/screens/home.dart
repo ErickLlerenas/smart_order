@@ -3,9 +3,10 @@ import 'package:smart_order/screens/feed/feed.dart';
 import 'package:smart_order/screens/orders/orders.dart';
 import 'package:smart_order/screens/map/map.dart';
 import 'package:smart_order/screens/add/foods.dart';
+import 'package:smart_order/screens/profile/profile.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  Home({Key? key}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -14,14 +15,12 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
+  static List<Widget> _widgetOptions = <Widget>[
     HomeMenu(),
     Orders(),
     Foods(),
     Map(),
-    Text(
-      'Profile in progress',
-    ),
+    Profile()
   ];
 
   void _onItemTapped(int index) {

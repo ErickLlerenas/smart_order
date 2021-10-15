@@ -8,14 +8,19 @@ import 'dart:async';
 import '../../helpers/database.dart';
 
 class Profile extends StatefulWidget {
-  Profile({Key? key, this.db}) : super(key: key);
-  final Database? db;
+  Database db = Database();
+  Profile({Key? key}) : super(key: key);
 
   @override
   _ProfileState createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,8 +35,8 @@ class _ProfileState extends State<Profile> {
             color: Colors.transparent,
             child: ElevatedButton(
                 onPressed: () async {
-                  await widget.db!.setLocation(
-                    id: '3121811727',
+                  await widget.db.setLocation(
+                    id: '3121047740',
                   );
                 },
                 child: const Text(

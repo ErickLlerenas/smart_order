@@ -1,12 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:geocoding/geocoding.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class Database {
-  var xd =
-      "https://images.pexels.com/photos/58722/pexels-photo-58722.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
+  
   late var firestore;
   initiliase() {
     firestore = FirebaseFirestore.instance;
@@ -137,16 +133,23 @@ class Database {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
       var lat = position.latitude;
-      var longi = position.longitude;
+      var long = position.longitude;
 
-      final coordinates = new GeoPoint(lat, longi);
+      final location = new GeoPoint(lat, long);
 
       await firestore
           .collection("sellers")
           .doc(id)
-          .update({'location': coordinates});
+          .update({'location': location});
     } catch (e) {
       print(e);
     }
   }
+
+
+  Future getUserData (bool isUser,String phone) async{
+    DocumentSnapshot document =  await firestore.collection(isUser?"users":"sellers").doc(phone).get();
+    return document.data();
+  }
+
 }

@@ -40,29 +40,11 @@ class Login extends StatelessWidget {
             margin: EdgeInsets.all(50),
             child: Column(
               children: [
-                TextFormField(
-                  decoration: new InputDecoration(
-                    labelText: "Ingresa correo",
-                    fillColor: Colors.white,
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    //fillColor: Colors.green
-                  ),
-                  validator: (val) {
-                    if (val?.length == 0) {
-                      return "Por favor ingresa el correo";
-                    } else {
-                      return null;
-                    }
-                  },
-                  keyboardType: TextInputType.emailAddress,
-                ),
+                
                 SizedBox(height: 30),
                 TextFormField(
                   decoration: new InputDecoration(
-                    labelText: "Ingresa contraseña",
+                    labelText: "Ingresa numero",
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(25.0),
@@ -72,12 +54,12 @@ class Login extends StatelessWidget {
                   ),
                   validator: (val) {
                     if (val?.length == 0) {
-                      return "Por favor ingresa la contraseña";
+                      return "Por favor ingresa el numero";
                     } else {
                       return null;
                     }
                   },
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.number,
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,

@@ -1,7 +1,10 @@
+import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geocoding/geocoding.dart';
 // import 'package:firebase_core/firebase_core.dart';
 // import 'package:geocoding/geocoding.dart';
-// import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Database {
   var xd =
@@ -129,5 +132,23 @@ class Database {
       print(e);
     }
     return docs;
+  }
+
+  Future<void> setLocation({required String id}) async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      var lat = position.latitude;
+      var longi = position.longitude;
+
+      final coordinates = new GeoPoint(lat, longi);
+
+      await firestore
+          .collection("sellers")
+          .doc(id)
+          .update({'location': coordinates});
+    } catch (e) {
+      print(e);
+    }
   }
 }

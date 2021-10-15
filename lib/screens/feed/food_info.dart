@@ -6,10 +6,12 @@ class FoodInfo extends StatefulWidget {
   final String title;
   final String description;
   final double price;
+  final String sellerID;
 
   const FoodInfo(
       {Key? key,
       required this.description,
+      required this.sellerID,
       required this.image,
       required this.title,
       required this.price})
@@ -127,8 +129,8 @@ class _FoodInfoState extends State<FoodInfo> {
                             isLoading = true;
                           });
                           await db.createOrder(
-                              userID: '3121047740',
-                              sellerID: '3121811727',
+                              userID: '3121811727',
+                              sellerID: widget.sellerID,
                               food: {
                                 'title': widget.title,
                                 'description': widget.description,

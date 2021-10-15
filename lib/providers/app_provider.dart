@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AppProvider with ChangeNotifier {
-  String _phone = "3121811727";
-  bool _isUser = true;
+  String _phone = "3121047740";
+  bool _isUser = false;
 
   String get phone => _phone;
   bool get isUser => _isUser;
@@ -13,9 +13,8 @@ class AppProvider with ChangeNotifier {
     return _phone;
   }
 
-  void changeUserUI(){
+  void changeUserUI() {
     _isUser = !_isUser;
     notifyListeners();
   }
-  
 }

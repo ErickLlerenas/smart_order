@@ -26,9 +26,6 @@ class _HomeMenuState extends State<HomeMenu> {
     query.docs.forEach((seller) {
       if(mounted){
         setState(() {
-          // TODO: Agregar el ID al objeto del array para que sí
-        var data = seller.data();
-        // data['id'] = seller.id;
         sellers.add(seller.data());
       });
       }
@@ -41,7 +38,7 @@ class _HomeMenuState extends State<HomeMenu> {
         body: SingleChildScrollView(
       child: SafeArea(
         child: Column(
-          children: sellers.map((seller) => Food(foods: seller['foods'],sellerID:seller.id)).toList())
+          children: sellers.map((seller) => Food(foods: seller['foods'],sellerID:seller['id'])).toList())
       ),
     ));
   }

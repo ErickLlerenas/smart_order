@@ -15,6 +15,7 @@ class Map extends StatefulWidget {
 
 class _MapState extends State<Map> {
   late BitmapDescriptor pinLocationIcon;
+
   List sellers = [];
   Completer<GoogleMapController> _controller = Completer();
 
@@ -28,8 +29,9 @@ class _MapState extends State<Map> {
 
   @override
   void initState() {
-    getSellersFood();
     super.initState();
+    setCustomMapPin();
+    getSellersFood();
   }
 
   @override
@@ -50,7 +52,7 @@ class _MapState extends State<Map> {
 
   void setCustomMapPin() async {
     pinLocationIcon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(devicePixelRatio: 2.5),
+        ImageConfiguration(size: Size(12, 12)),
         '../../assets/images/icono-circulo.png');
   }
 
@@ -76,7 +78,7 @@ class _MapState extends State<Map> {
     setState(() {});
   }
 
-  Future<void> currentCamera() async {
+  void currentCamera() async {
     var position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     // var lastPosition = await Geolocator.getLastKnownPosition();

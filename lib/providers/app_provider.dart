@@ -4,13 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AppProvider with ChangeNotifier {
-  String _phone = "3121047740";
+  String _phone = "";
   bool _isUser = false;
 
   String get phone => _phone;
   bool get isUser => _isUser;
-
-  Future savePhoneNumber() async {}
 
   Future readPhoneNumber() async {
     return _phone;
@@ -18,6 +16,7 @@ class AppProvider with ChangeNotifier {
 
   void changeUserUI() {
     _isUser = !_isUser;
+    print(_isUser);
     notifyListeners();
   }
 
@@ -42,7 +41,8 @@ class AppProvider with ChangeNotifier {
   Future<String> readPhone() async {
     try {
       final file = await _localFile;
-      return await file.readAsString();
+      _phone = await file.readAsString();
+      return phone;
     } catch (e) {
       return "";
     }

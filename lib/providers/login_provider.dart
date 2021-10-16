@@ -43,12 +43,13 @@ class LoginProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future signInWithCredential(
-      String verificationId, String smsCode, BuildContext context) async {
+  Future signInWithCredential(String verificationId, String smsCode,
+      BuildContext context, String phoneNumber) async {
     UserCredential userCredential = await FirebaseAuth.instance
         .signInWithCredential(PhoneAuthProvider.credential(
             verificationId: verificationId, smsCode: smsCode));
     if (userCredential.user != null) {
+      writePhone(phoneNumber);
       Navigator.pop(context);
       Navigator.push(context, MaterialPageRoute(builder: (_) => Home()));
     }

@@ -151,42 +151,48 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                 SizedBox(
                   height: 14,
                 ),
-                isLoading ? CircularProgressIndicator(): Container(
-                  margin: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 30),
-                  child: ButtonTheme(
-                    height: 50,
-                    child: TextButton(
-                      onPressed: () async{
-                        formKey.currentState!.validate();
-                        // conditions for validating
-                        if (currentText.length != 6) {
-                          errorController!.add(ErrorAnimationType
-                              .shake); // Triggering error shake animation
+                isLoading
+                    ? CircularProgressIndicator()
+                    : Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 16.0, horizontal: 30),
+                        child: ButtonTheme(
+                          height: 50,
+                          child: TextButton(
+                            onPressed: () async {
+                              formKey.currentState!.validate();
+                              // conditions for validating
+                              if (currentText.length != 6) {
+                                errorController!.add(ErrorAnimationType
+                                    .shake); // Triggering error shake animation
 
-                        } else {
-                          
-                        await context.read<LoginProvider>().signInWithCredential(
-                              Provider.of<LoginProvider>(context, listen: false)
-                                  .verificationCode,
-                              textEditingController.text,context);
-                        }
-                      },
-                      child: Center(
-                          child: Text(
-                        "Verificar".toUpperCase(),
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      )),
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.green.shade300,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
+                              } else {
+                                await context
+                                    .read<LoginProvider>()
+                                    .signInWithCredential(
+                                        Provider.of<LoginProvider>(context,
+                                                listen: false)
+                                            .verificationCode,
+                                        textEditingController.text,
+                                        context,
+                                        widget.phoneNumber);
+                              }
+                            },
+                            child: Center(
+                                child: Text(
+                              "Verificar".toUpperCase(),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                            )),
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.green.shade300,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
               ],
             ),
           ),

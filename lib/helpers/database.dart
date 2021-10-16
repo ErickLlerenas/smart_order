@@ -37,35 +37,46 @@ class Database {
       required Map food,
       required int amount}) async {
     try {
+
+      Map data = {
+          'food': food,
+          'user_id': userID,
+          'amount': amount,
+          'state': {'accepted': false, 'canceled': false, 'finished': false}
+      };
+
       DocumentSnapshot seller =
           await firestore.collection("orders").doc(sellerID).get();
       List orders = [];
       if (seller.exists) {
         orders = seller['orders'];
-        orders.add({
-          'food': food,
-          'user_id': userID,
-          'amount': amount,
-          'state': {'accepted': false, 'canceled': false, 'finished': false}
-        });
-
+        orders.add(data);
         await firestore
             .collection("orders")
             .doc(sellerID)
             .update({'orders': orders});
       } else {
-        orders.add({
-          'food': food,
-          'user_id': userID,
-          'amount': amount,
-          'state': {'accepted': false, 'canceled': false, 'finished': false}
-        });
+        orders.add(data);
 
         await firestore
             .collection("orders")
             .doc(sellerID)
             .set({'orders': orders});
       }
+
+      var userData =  await firestore
+            .collection("users")
+            .doc(userID)
+            .get();
+
+      List userOrders = userData['orders'];
+      userOrders.add(data);
+
+      await firestore
+            .collection("users")
+            .doc(userID)
+            .update({'orders': userOrders});
+
     } catch (e) {
       print("$e");
     }

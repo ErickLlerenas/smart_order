@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:smart_order/providers/app_provider.dart';
 import 'package:smart_order/providers/login_provider.dart';
 import 'package:smart_order/screens/home.dart';
+import 'package:smart_order/screens/loading_screen.dart';
 import 'package:smart_order/screens/login/login.dart';
+
 import 'package:flutter/services.dart';
 
 Future<void> main() async {
@@ -29,25 +31,24 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  //TODO: Check if user is already loged in or not
   bool isLoggedIn = false;
-  String phone = "";
+  bool isLoading = true;
+
   @override
   void initState() {
-    Provider.of<AppProvider>(context, listen: false).readPhone().then((value) {
-      phone = value;
-      print(phone);
-      if (phone.isEmpty) {
+    Provider.of<AppProvider>(context, listen: false).readPhone().then((_phone) {
+      if (_phone.isEmpty) {
         setState(() {
           isLoggedIn = false;
+          isLoading = false;
         });
       } else {
         setState(() {
           isLoggedIn = true;
+          isLoading = false;
         });
       }
     });
-
     super.initState();
   }
 
@@ -58,13 +59,12 @@ class _MyAppState extends State<MyApp> {
       DeviceOrientation.portraitDown,
     ]);
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Smart Order',
-      initialRoute: isLoggedIn ? '/home' : '/login',
-      routes: {
-        '/login': (context) => Login(),
-        '/home': (context) => Home(),
-      },
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'Smart Order',
+        home: isLoading
+            ? LoadingScreen()
+            : isLoggedIn
+                ? Home()
+                : Login());
   }
 }

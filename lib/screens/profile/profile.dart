@@ -16,7 +16,6 @@ class _ProfileState extends State<Profile> {
   bool isUser = false;
   Map userData = {};
   bool isSwitched = false;
-  String mode = "";
 
   @override
   void initState() {
@@ -26,11 +25,7 @@ class _ProfileState extends State<Profile> {
     super.initState();
     db.initiliase();
     db.getUserData(isUser, phone).then((data) {
-      print(data);
       setState(() {
-        if (isUser) {
-          mode = "Vendedor";
-        }
         userData = data;
       });
     });
@@ -48,7 +43,7 @@ class _ProfileState extends State<Profile> {
             Container(
               margin: EdgeInsets.all(width / 10),
               child: Center(
-                child: userData['image'] != null
+                child: userData['image']!= null &&userData['image'].isNotEmpty
                     ? CircleAvatar(
                         radius: width / 2.5,
                         backgroundImage: NetworkImage(userData['image']),
@@ -86,18 +81,13 @@ class _ProfileState extends State<Profile> {
                     )),
               ),
             ),
-            Text("Cambiar de modo, ahora estas en modo $mode"),
             Container(
               child: Switch(
                 value: isUser,
                 onChanged: (value) {
                   setState(() {
                     isUser = value;
-                    if (isUser) {
-                      mode = "Cliente";
-                    } else {
-                      mode = "Vendedor";
-                    }
+                   
                     Provider.of<AppProvider>(context, listen: false)
                         .changeUserUI();
                   });

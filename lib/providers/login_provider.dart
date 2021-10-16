@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -39,19 +40,23 @@ class LoginProvider with ChangeNotifier {
 
   void _codeAutoRetrievalTimeout(String verificationID) {
     _verificationCode = verificationID;
-    print(_verificationCode);
     notifyListeners();
   }
 
   Future signInWithCredential(String verificationId, String smsCode,
       BuildContext context, String phoneNumber) async {
-    UserCredential userCredential = await FirebaseAuth.instance
-        .signInWithCredential(PhoneAuthProvider.credential(
-            verificationId: verificationId, smsCode: smsCode));
-    if (userCredential.user != null) {
-      writePhone(phoneNumber);
-      Navigator.pop(context);
-      Navigator.push(context, MaterialPageRoute(builder: (_) => Home()));
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithCredential(PhoneAuthProvider.credential(
+              verificationId: verificationId, smsCode: smsCode));
+      if (userCredential.user != null) {
+        await writePhone(phoneNumber);
+        await saveUserOnFirebase(phoneNumber);
+        Navigator.pop(context);
+        Navigator.push(context, MaterialPageRoute(builder: (_) => Home()));
+      }
+    } catch (e) {
+      print("Error: $e");
     }
   }
 
@@ -79,6 +84,27 @@ class LoginProvider with ChangeNotifier {
       return await file.readAsString();
     } catch (e) {
       return "";
+    }
+  }
+
+  Future saveUserOnFirebase(String _phone)async{
+    DocumentSnapshot user = await FirebaseFirestore.instance.collection('users').doc(_phone).get();
+    if(!user.exists){
+      await FirebaseFirestore.instance.collection('users').doc(_phone).set({
+        'id': _phone,
+        'image': "",
+        'name': "",
+        'orders': []
+      });
+
+      await FirebaseFirestore.instance.collection('sellers').doc(_phone).set({
+        'id': _phone,
+        'image': "",
+        'name': "",
+        'orders': [],
+        'location': GeoPoint(10,10),
+        'foods': []
+      });
     }
   }
 }

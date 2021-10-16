@@ -5,6 +5,7 @@ import 'package:smart_order/screens/map/map.dart';
 import 'package:smart_order/screens/add/foods.dart';
 import 'package:smart_order/screens/profile/profile.dart';
 
+
 class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);
 
@@ -15,18 +16,24 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
 
-  static List<Widget> _widgetOptions = <Widget>[
-    HomeMenu(),
-    Orders(),
-    Foods(),
-    Map(),
-    Profile()
-  ];
+  List _widgetOptions = [];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    
+    _widgetOptions = [
+      HomeMenu(), 
+      Orders(), 
+      Foods(), 
+      Map(), 
+      Profile()];
+    super.initState();
   }
 
   @override

@@ -19,20 +19,20 @@ class _OrdersState extends State<Orders> {
   void initState() {
     phone = Provider.of<AppProvider>(context, listen: false).phone;
     isUser = Provider.of<AppProvider>(context, listen: false).isUser;
-    getOrders(phone);
+    getOrders(phone, isUser);
     super.initState();
   }
 
-  Future getOrders(String phone) async {
+  Future getOrders(String phone, bool isUser) async {
     await Firebase.initializeApp();
-    DocumentSnapshot seller = await FirebaseFirestore.instance
-        .collection('orders')
+    DocumentSnapshot user = await FirebaseFirestore.instance
+        .collection(isUser ? 'users' : 'orders')
         .doc(phone)
         .get();
     if (mounted) {
-      if (seller.exists) {
+      if (user.exists) {
         setState(() {
-          orders = seller['orders'];
+          orders = user['orders'];
         });
       }
     }
@@ -40,7 +40,6 @@ class _OrdersState extends State<Orders> {
 
   Future setStatus(
       {required String id, required int index, required bool accepted}) async {
-    print(index);
     await Firebase.initializeApp();
     DocumentSnapshot documentOrders =
         await FirebaseFirestore.instance.collection('orders').doc(id).get();
@@ -50,7 +49,7 @@ class _OrdersState extends State<Orders> {
         .collection("orders")
         .doc(id)
         .update({'orders': orders});
-    getOrders(phone);
+    getOrders(phone,isUser);
   }
 
   @override
@@ -60,7 +59,13 @@ class _OrdersState extends State<Orders> {
     return Scaffold(
         body: SingleChildScrollView(
       child: SafeArea(
-          child: Wrap(
+          child: orders.length==0 ? Center(child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.cancel),
+              Text("No hay historial de pedidos")
+            ],
+          )) :  Wrap(
               children: orders
                   .map(
                     (order) => GestureDetector(
@@ -135,10 +140,13 @@ class _OrdersState extends State<Orders> {
                                         splashColor:
                                             Colors.grey, // Splash color
                                         onTap: () {
-                                          setStatus(
+                                          if(!isUser){
+                                              setStatus(
                                               id: phone,
                                               index: orders.indexOf(order),
                                               accepted: true);
+                                          }
+                                        
                                         },
                                         child: SizedBox(
                                             width: 56,

@@ -85,8 +85,6 @@ class _LoginState extends State<Login> {
                               minimumSize: Size(double.infinity, 50)),
                           onPressed: () async{
                              if (_formKey.currentState!.validate()) {
-                           
-                               //TODO: Crear el registro de login y ver si jala
                                context.read<LoginProvider>().verifyCode(phoneController.text);
                                 Navigator.pop(context);
                                Navigator.push(context,

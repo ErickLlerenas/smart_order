@@ -165,6 +165,7 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
                               .shake); // Triggering error shake animation
 
                         } else {
+                          
                         await context.read<LoginProvider>().signInWithCredential(
                               Provider.of<LoginProvider>(context, listen: false)
                                   .verificationCode,

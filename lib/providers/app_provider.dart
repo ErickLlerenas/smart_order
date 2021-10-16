@@ -16,6 +16,11 @@ class AppProvider with ChangeNotifier {
     return _phone;
   }
 
+  void changeUserUI() {
+    _isUser = !_isUser;
+    notifyListeners();
+  }
+
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
@@ -32,11 +37,6 @@ class AppProvider with ChangeNotifier {
 
     // Write the file
     return file.writeAsString('$phone');
-  }
-
-  void changeUserUI() {
-    _isUser = !_isUser;
-    notifyListeners();
   }
 
   Future<String> readPhone() async {

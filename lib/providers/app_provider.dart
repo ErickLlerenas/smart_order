@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AppProvider with ChangeNotifier {
-  String _phone = "3121811727";
-  bool _isUser = true;
+  String _phone = "3121047740";
+  bool _isUser = false;
 
   String get phone => _phone;
   bool get isUser => _isUser;

@@ -14,9 +14,11 @@ class Orders extends StatefulWidget {
 class _OrdersState extends State<Orders> {
   List orders = [];
   String phone = "";
+  bool isUser = true;
   @override
   void initState() {
     phone = Provider.of<AppProvider>(context, listen: false).phone;
+    isUser = Provider.of<AppProvider>(context, listen: false).isUser;
     getOrders(phone);
     super.initState();
   }
@@ -48,6 +50,7 @@ class _OrdersState extends State<Orders> {
         .collection("orders")
         .doc(id)
         .update({'orders': orders});
+    getOrders(phone);
   }
 
   @override
@@ -61,7 +64,9 @@ class _OrdersState extends State<Orders> {
               children: orders
                   .map(
                     (order) => GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        print(order);
+                      },
                       child: Container(
                         width: width,
                         child: Card(
@@ -97,6 +102,16 @@ class _OrdersState extends State<Orders> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 18)),
+                                  Text(
+                                      order['state']['accepted']
+                                          ? "Estado: aceptada"
+                                          : "Estado: rechazada",
+                                      style: TextStyle(
+                                          color: order['state']['accepted']
+                                              ? Colors.lightGreen
+                                              : Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20)),
                                   SizedBox(
                                     height: 15,
                                   ),
@@ -111,42 +126,49 @@ class _OrdersState extends State<Orders> {
                                 ],
                               ),
                             ),
-                            ClipOval(
-                              child: Material(
-                                color: Colors.green[200], // Button color
-                                child: InkWell(
-                                  splashColor: Colors.grey, // Splash color
-                                  onTap: () {
-                                    setStatus(
-                                        id: '3121047740',
-                                        index: orders.indexOf(order),
-                                        accepted: true);
-                                  },
-                                  child: SizedBox(
-                                      width: 56,
-                                      height: 56,
-                                      child: Icon(Icons.check)),
-                                ),
-                              ),
-                            ),
-                            ClipOval(
-                              child: Material(
-                                color: Colors.redAccent[200], // Button color
-                                child: InkWell(
-                                  splashColor: Colors.grey, // Splash color
-                                  onTap: () {
-                                    setStatus(
-                                        id: '3121047740',
-                                        index: orders.indexOf(order),
-                                        accepted: false);
-                                  },
-                                  child: SizedBox(
-                                      width: 56,
-                                      height: 56,
-                                      child: Icon(Icons.delete)),
-                                ),
-                              ),
-                            )
+                            isUser
+                                ? Container()
+                                : ClipOval(
+                                    child: Material(
+                                      color: Colors.green[200], // Button color
+                                      child: InkWell(
+                                        splashColor:
+                                            Colors.grey, // Splash color
+                                        onTap: () {
+                                          setStatus(
+                                              id: phone,
+                                              index: orders.indexOf(order),
+                                              accepted: true);
+                                        },
+                                        child: SizedBox(
+                                            width: 56,
+                                            height: 56,
+                                            child: Icon(Icons.check)),
+                                      ),
+                                    ),
+                                  ),
+                            isUser
+                                ? Container()
+                                : ClipOval(
+                                    child: Material(
+                                      color:
+                                          Colors.redAccent[200], // Button color
+                                      child: InkWell(
+                                        splashColor:
+                                            Colors.grey, // Splash color
+                                        onTap: () {
+                                          setStatus(
+                                              id: '3121047740',
+                                              index: orders.indexOf(order),
+                                              accepted: false);
+                                        },
+                                        child: SizedBox(
+                                            width: 56,
+                                            height: 56,
+                                            child: Icon(Icons.delete)),
+                                      ),
+                                    ),
+                                  )
                           ],
                         )),
                       ),

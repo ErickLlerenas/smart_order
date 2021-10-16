@@ -63,16 +63,17 @@ class _MapState extends State<Map> {
       if (mounted) {
         GeoPoint pos = seller["location"];
         LatLng latLng = new LatLng(pos.latitude, pos.longitude);
-        setState(() {
-          myMarker.add(
-            Marker(
-              markerId: MarkerId(seller['name']),
-              position: latLng,
-            ),
-          );
-        });
+
+        myMarker.add(
+          Marker(
+            markerId: MarkerId(seller['name']),
+            position: latLng,
+          ),
+        );
       }
     });
+
+    setState(() {});
   }
 
   Future<void> currentCamera() async {

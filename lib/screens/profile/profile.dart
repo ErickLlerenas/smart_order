@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_order/providers/app_provider.dart';
 import '../../helpers/database.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Profile extends StatefulWidget {
   Profile({Key? key}) : super(key: key);

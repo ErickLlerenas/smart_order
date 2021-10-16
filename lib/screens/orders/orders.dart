@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_order/providers/app_provider.dart';
-import 'package:smart_order/screens/map/map.dart';
 
 class Orders extends StatefulWidget {
   const Orders({Key? key}) : super(key: key);
@@ -26,7 +25,7 @@ class _OrdersState extends State<Orders> {
     await Firebase.initializeApp();
     DocumentSnapshot seller = await FirebaseFirestore.instance
         .collection('orders')
-        .doc('3121811727')
+        .doc(phone)
         .get();
     if (mounted) {
       if (seller.exists) {
@@ -43,10 +42,8 @@ class _OrdersState extends State<Orders> {
     await Firebase.initializeApp();
     DocumentSnapshot documentOrders =
         await FirebaseFirestore.instance.collection('orders').doc(id).get();
-    //documentOrders['orders'][index]['state']['accepted'] = true;
     List orders = documentOrders['orders'];
     orders[index]['state']['accepted'] = accepted;
-    //print(documentOrders['orders'][index]['state']['accepted']);
     await FirebaseFirestore.instance
         .collection("orders")
         .doc(id)

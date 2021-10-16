@@ -35,6 +35,12 @@ class _MapState extends State<Map> {
   }
 
   @override
+  void dispose() {
+    _disposeController();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: GoogleMap(
@@ -61,21 +67,29 @@ class _MapState extends State<Map> {
     QuerySnapshot query =
         await FirebaseFirestore.instance.collection('sellers').get();
     query.docs.forEach((seller) {
-      print(seller["location"]);
+
       if (mounted) {
         GeoPoint pos = seller["location"];
         LatLng latLng = new LatLng(pos.latitude, pos.longitude);
 
-        myMarker.add(
+        setState(() {
+            myMarker.add(
           Marker(
             markerId: MarkerId(seller['name']),
             position: latLng,
           ),
         );
+        });
+        
       }
     });
 
-    setState(() {});
+    
+  }
+
+  Future<void> _disposeController() async {
+  final GoogleMapController controller = await _controller.future;
+  controller.dispose();
   }
 
   void currentCamera() async {
@@ -98,8 +112,9 @@ class _MapState extends State<Map> {
           ),
         );
       });
+          controller.animateCamera(CameraUpdate.newCameraPosition(newCamera));
+
     }
 
-    controller.animateCamera(CameraUpdate.newCameraPosition(newCamera));
   }
 }

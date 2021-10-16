@@ -1,6 +1,8 @@
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_order/providers/app_provider.dart';
 
 import '../../helpers/database.dart';
 
@@ -17,9 +19,11 @@ class _AddState extends State<Add> {
   TextEditingController descController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController imageController = TextEditingController();
+  String phone = "";
 
   @override
   void initState() {
+    phone = Provider.of<AppProvider>(context, listen: false).phone;
     super.initState();
   }
 
@@ -81,7 +85,7 @@ class _AddState extends State<Add> {
                     isLoading = true;
                   });
                   await widget.db.add(
-                  id: '3121811727',
+                  id: phone,
                   title: titleController.text,
                   description: descController.text,
                   image: imageController.text,

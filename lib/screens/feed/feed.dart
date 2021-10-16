@@ -12,6 +12,7 @@ class HomeMenu extends StatefulWidget {
 
 class _HomeMenuState extends State<HomeMenu> {
   List sellers = [];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -26,6 +27,7 @@ class _HomeMenuState extends State<HomeMenu> {
     query.docs.forEach((seller) {
       if(mounted){
         setState(() {
+        isLoading = false;
         sellers.add(seller.data());
       });
       }
@@ -35,12 +37,12 @@ class _HomeMenuState extends State<HomeMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-      child: SafeArea(
-        child: Column(
-          children: sellers.map((seller) => Food(foods: seller['foods'],sellerID:seller['id'])).toList())
-      ),
-    ));
+        body: isLoading ? Center(child: CircularProgressIndicator(),): SafeArea(
+          child: SingleChildScrollView(
+              child: Column(
+          children: sellers.map((seller) => Food(foods: seller['foods'],sellerID:seller['id'])).toList()),
+            ),
+        ));
   }
 }
 

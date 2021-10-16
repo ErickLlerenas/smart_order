@@ -42,11 +42,11 @@ class LoginProvider with ChangeNotifier {
 
   Future signInWithCredential(
       String verificationId, String smsCode, BuildContext context) async {
-    print("VERIFICATION CODE: $verificationId");
     UserCredential userCredential = await FirebaseAuth.instance
         .signInWithCredential(PhoneAuthProvider.credential(
             verificationId: verificationId, smsCode: smsCode));
     if (userCredential.user != null) {
+      //TODO: Guardar el teléfono en el phone.txt
       Navigator.pop(context);
       Navigator.push(context, MaterialPageRoute(builder: (_) => Home()));
     }
